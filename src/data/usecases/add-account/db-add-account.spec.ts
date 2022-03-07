@@ -33,17 +33,20 @@ describe('Signup DbAddAccount ', () => {
   const makeAddAccountRepository = (): AddAccountRepository => {
     class AddAccountRepositoryStub implements AddAccountRepository {
       async add (AddAccountData: AddAccountModel): Promise<AccountModel> {
-        const account = {
-          id: 'valid_id',
-          name: 'valid_name',
-          email: 'valid_email',
-          password: 'valid_encrypted_password'
-        }
+        const account = makeValidAccountModel()
         return await new Promise(resolve => resolve(account))
       }
     }
     return new AddAccountRepositoryStub()
   }
+
+  const makeValidAccountModel = (): AccountModel => ({
+    id: 'valid_id',
+    name: 'valid_name',
+    email: 'valid_email',
+    password: 'valid_encrypted_password'
+  })
+
   test('Should call encrypt with correct password', async () => {
     const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
@@ -96,5 +99,16 @@ describe('Signup DbAddAccount ', () => {
     }
     const result = sut.add(account)
     await expect(result).rejects.toThrow()
+  })
+
+  test('Should return a valid account when it succed', async () => {
+    const { sut } = makeSut()
+    const account = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+    const result = await sut.add(account)
+    expect(result).toEqual(makeValidAccountModel())
   })
 })
