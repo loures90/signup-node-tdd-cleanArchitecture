@@ -69,7 +69,7 @@ describe('Signup DbAddAccount ', () => {
     await expect(result).rejects.toThrow()
   })
 
-  test('Should call addAccountRepository with correct password', async () => {
+  test('Should call addAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
     const account = {
@@ -83,5 +83,18 @@ describe('Signup DbAddAccount ', () => {
       email: 'valid_email',
       password: 'hashed_password'
     })
+  })
+
+  test('Should throw if addAccountRepository throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    jest.spyOn(addAccountRepositoryStub, 'add')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const account = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+    const result = sut.add(account)
+    await expect(result).rejects.toThrow()
   })
 })
