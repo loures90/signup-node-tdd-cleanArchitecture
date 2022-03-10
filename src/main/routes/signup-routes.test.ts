@@ -1,7 +1,21 @@
 import request from 'supertest'
 import app from '../config/app'
+import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 
 describe('Signup', () => {
+  beforeAll(async () => {
+    await MongoHelper.connect(process.env.MONGO_URL as string)
+  })
+
+  afterAll(async () => {
+    await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    const questionsCollection = await MongoHelper.getCollection('accounts')
+    await questionsCollection.deleteMany({})
+  })
+
   test('Should make signup and return 200 on success ', async () => {
     await request(app)
       .post('/api/signup')
