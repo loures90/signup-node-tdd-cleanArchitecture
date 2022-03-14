@@ -12,8 +12,8 @@ describe('Signup', () => {
   })
 
   beforeEach(async () => {
-    const questionsCollection = await MongoHelper.getCollection('accounts')
-    await questionsCollection.deleteMany({})
+    const accountsCollection = await MongoHelper.getCollection('accounts')
+    await accountsCollection.deleteMany({})
   })
 
   test('Should make signup and return 200 on success ', async () => {
