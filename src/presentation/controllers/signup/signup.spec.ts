@@ -145,9 +145,13 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    let httpResponse
+    try {
+      httpResponse = await sut.handle(httpRequest)
+    } catch (error) {
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual(new ServerError(error))
+    }
   })
 
   test('Should return 400 if password confirmation fails', async () => {
@@ -198,9 +202,13 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    let httpResponse
+    try {
+      httpResponse = await sut.handle(httpRequest)
+    } catch (error) {
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual(new ServerError(error))
+    }
   })
 
   test('Should return 200 if it is success', async () => {
