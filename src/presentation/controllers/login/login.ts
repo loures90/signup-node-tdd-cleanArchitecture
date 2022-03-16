@@ -33,7 +33,7 @@ export class LoginController implements Controller {
       if (!accessToken) {
         return unauthorized()
       }
-      return await new Promise(resolve => resolve(ok('')))
+      return await new Promise(resolve => resolve(ok(accessToken)))
     } catch (error) {
       return serverError(error)
     }
