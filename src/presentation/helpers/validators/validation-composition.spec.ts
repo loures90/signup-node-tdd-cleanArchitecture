@@ -31,4 +31,10 @@ describe('Validation Composition', () => {
     const error = sut.validate({ field: 'any_value' })
     expect(error).toEqual(new MissingParamError('field'))
   })
+
+  test('Should return null validations are ok', () => {
+    const { sut } = makeSut()
+    const result = sut.validate({ field: 'any_value' })
+    expect(result).toBe(null)
+  })
 })
