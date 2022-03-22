@@ -1,7 +1,12 @@
-import { AuthenticationModel } from '../../../domain/usecases/authentication'
-import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { DbAuthentication } from './db-authentication'
-import { AccountModel, HashComparer, TokenGenerator, UpdateAccessTokenRepository } from './db-authentication-protocols'
+import {
+  AccountModel,
+  HashComparer,
+  TokenGenerator,
+  UpdateAccessTokenRepository,
+  LoadAccountByEmailRepository,
+  AuthenticationModel
+} from './db-authentication-protocols'
 
 const makeFakeAuthentication = (): AuthenticationModel => ({
   email: 'any_email@email.com',
@@ -146,5 +151,12 @@ describe('Signup DbAddAccount ', () => {
     const updateSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'update')
     await sut.auth(makeFakeAuthentication())
     expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_access_token')
+  })
+
+  test('Should throw if updateAccessTokenRepository throws', async () => {
+    const { sut, updateAccessTokenRepositoryStub } = makeSut()
+    jest.spyOn(updateAccessTokenRepositoryStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.auth(makeFakeAuthentication())
+    await expect(promise).rejects.toThrow()
   })
 })
