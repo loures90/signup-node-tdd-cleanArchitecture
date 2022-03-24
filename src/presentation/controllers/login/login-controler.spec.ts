@@ -1,8 +1,8 @@
 import { InvalidParamError, ServerError } from '../../errors'
-import { LoginController } from './login'
+import { LoginController } from './login-controler'
 import { Authentication, AuthenticationModel } from '../../../domain/usecases/authentication'
 import { badRequest, ok, unauthorized } from '../../helpers/http/http-helper'
-import { HttpRequest, Validation } from './login-protocols'
+import { HttpRequest, Validation } from './login-controler-protocols'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

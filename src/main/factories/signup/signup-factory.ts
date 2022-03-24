@@ -1,11 +1,11 @@
-import { SignUpController } from '../../../presentation/controllers/signup/signup'
+import { SignUpController } from '../../../presentation/controllers/signup/signup-controler'
 import { DbAddAccount } from '../../../data/usecases/add-account/db-add-account'
 import { BcryptAdapter } from '../../../infra/criptography/bcrypt-adapter/bcrypt-adapter'
-import { AccountMongoRepository } from '../../../infra/db/mongodb/account-repository/account'
 import { Controller } from '../../../presentation/protocols'
-import { LogControllerDecorator } from '../../decorators/log'
-import { LogMongoRepository } from '../../../infra/db/mongodb/log-repository/log-error'
-import { makeSignUpValidation } from './signup-validation'
+import { LogControllerDecorator } from '../../decorators/log-decorator'
+import { LogMongoRepository } from '../../../infra/db/mongodb/log/log-error-repository'
+import { makeSignUpValidation } from './signup-validation-factory'
+import { AccountMongoRepository } from '../../../infra/db/mongodb/account/account-mongo-repository'
 
 export const makeSignUpController = (): Controller => {
   const salt = 12

@@ -1,7 +1,7 @@
 import { InvalidParamError, ServerError } from '../../errors'
 import { badRequest } from '../../helpers/http/http-helper'
-import { SignUpController } from './signup'
-import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation } from './signup-protocols'
+import { SignUpController } from './signup-controler'
+import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation } from './signup-controler-protocols'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
