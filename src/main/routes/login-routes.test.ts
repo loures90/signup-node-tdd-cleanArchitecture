@@ -48,5 +48,15 @@ describe('Login Routes', () => {
         })
         .expect(200)
     })
+
+    test('Should return 401 if account does not exist ', async () => {
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'other_email@email.com',
+          password: 'any_password'
+        })
+        .expect(401)
+    })
   })
 })
