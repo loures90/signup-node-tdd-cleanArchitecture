@@ -68,7 +68,7 @@ describe('Login Controller', () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok('any_valid_token'))
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_valid_token' }))
   })
 
   test('Should call validation with correct values', async () => {
