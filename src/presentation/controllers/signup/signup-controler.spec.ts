@@ -1,5 +1,5 @@
-import { InvalidParamError, ServerError } from '../../errors'
-import { badRequest } from '../../helpers/http/http-helper'
+import { EmailInUseError, InvalidParamError, ServerError } from '../../errors'
+import { badRequest, forbidden } from '../../helpers/http/http-helper'
 import { SignUpController } from './signup-controler'
 import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation, Authentication, AuthenticationModel } from './signup-controler-protocols'
 
@@ -145,5 +145,13 @@ describe('SignUp Controller', () => {
       expect(httpResponse.statusCode).toBe(500)
       expect(httpResponse.body).toEqual(new ServerError(error))
     }
+  })
+
+  test('Should return 403 if addAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    const httpRequest = makeFakeRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 })
