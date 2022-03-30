@@ -22,7 +22,8 @@ const makeSut = (): SutTypes => {
     validationStub
   }
 }
-const httpRequest: HttpRequest = {
+
+const makeFakeRequest = (): HttpRequest => ({
   body: {
     question: 'any_question',
     answers: [{
@@ -30,12 +31,13 @@ const httpRequest: HttpRequest = {
       answers: 'any_answer'
     }]
   }
-}
+})
+
 describe('Add Survey', () => {
   test('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const surveySpy = jest.spyOn(validationStub, 'validate')
-    await sut.handle(httpRequest)
+    await sut.handle(makeFakeRequest())
     expect(surveySpy).toBeCalledWith({
       question: 'any_question',
       answers: [{
