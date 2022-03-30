@@ -1,5 +1,5 @@
 import { InvalidParamError, ServerError } from '../../../errors'
-import { badRequest } from '../../../helpers/http/http-helper'
+import { badRequest, noContent } from '../../../helpers/http/http-helper'
 import { AddSurveyController } from './add-survey-controller'
 import { AddSurvey, AddSurveyModel, HttpRequest, Validation } from './add-survey-protocols'
 
@@ -95,5 +95,11 @@ describe('Add Survey', () => {
       expect(httpResponse.statusCode).toBe(500)
       expect(httpResponse.body).toEqual(new ServerError(error))
     }
+  })
+
+  test('Should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(noContent())
   })
 })
