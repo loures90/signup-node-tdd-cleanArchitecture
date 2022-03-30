@@ -13,7 +13,6 @@ export class SignUpController implements Controller {
     try {
       const error = this.validation.validate(httpRequest.body)
       if (error) {
-        console.log(error)
         return badRequest(error)
       }
 
