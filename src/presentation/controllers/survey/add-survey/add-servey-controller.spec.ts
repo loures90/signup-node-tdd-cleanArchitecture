@@ -1,4 +1,4 @@
-import { InvalidParamError } from '../../../errors'
+import { InvalidParamError, ServerError } from '../../../errors'
 import { badRequest } from '../../../helpers/http/http-helper'
 import { AddSurveyController } from './add-survey-controller'
 import { AddSurvey, AddSurveyModel, HttpRequest, Validation } from './add-survey-protocols'
@@ -79,5 +79,21 @@ describe('Add Survey', () => {
         answers: 'any_answer'
       }]
     })
+  })
+
+  test('Should return 500 if AddSurvey throws', async () => {
+    const { sut, addSurveyStub } = makeSut()
+    jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeRequest()
+    let httpResponse
+    try {
+      httpResponse = await sut.handle(httpRequest)
+    } catch (error) {
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual(new ServerError(error))
+    }
   })
 })
