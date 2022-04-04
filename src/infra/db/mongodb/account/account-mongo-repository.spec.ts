@@ -76,4 +76,18 @@ describe('Account Mongo Repository', () => {
       expect(account.accessToken).toBe('access_token')
     })
   })
+
+  describe('loadByToken()', () => {
+    test('Should return an user by accessToken when loadToken is on success', async () => {
+      const sut = makeSut()
+      await accountsCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        accessToken: 'any_token'
+      })
+      const account = await sut.loadByToken('any_token')
+      expect(account).toBeTruthy()
+    })
+  })
 })
