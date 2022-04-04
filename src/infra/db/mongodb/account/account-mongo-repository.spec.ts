@@ -102,5 +102,11 @@ describe('Account Mongo Repository', () => {
       const account = await sut.loadByToken('any_token', 'any_role')
       expect(account).toBeTruthy()
     })
+
+    test('Should return null loadToken does not find user', async () => {
+      const sut = makeSut()
+      const account = await sut.loadByToken('any_token', 'any_role')
+      expect(account).toBeFalsy()
+    })
   })
 })
