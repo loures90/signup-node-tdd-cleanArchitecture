@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { adaptRoute } from '../adapters/express/express-route-adaper'
+import { adaptRoute } from '../adapters/express-route-adaper'
 import { makeSurveyController } from '../factories/controllers/add-survey/add-survey-controller-factory'
 
 export default (router: Router): void => {
