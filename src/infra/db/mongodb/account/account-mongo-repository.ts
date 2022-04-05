@@ -51,7 +51,6 @@ export class AccountMongoRepository implements
       accessToken: token,
       role
     })
-    console.log(result)
     if (!result?._id) {
       return null
     }
