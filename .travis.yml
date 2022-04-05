@@ -1,0 +1,7 @@
+
+language: node_js
+node_js:
+  - 17.x
+script:
+  - eslint 'src/**' 
+  - npm run test:coveralls
