@@ -2,6 +2,7 @@ import { InvalidParamError, ServerError } from '../../../errors'
 import { badRequest, noContent } from '../../../helpers/http/http-helper'
 import { AddSurveyController } from './add-survey-controller'
 import { AddSurvey, AddSurveyModel, HttpRequest, Validation } from './add-survey-protocols'
+import Mockdate from 'mockdate'
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
@@ -14,7 +15,7 @@ const makeValidation = (): Validation => {
 
 const makeAddSurvey = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
-    async add (data: AddSurveyModel): Promise<void> {}
+    async add (data: AddSurveyModel): Promise<void> { }
   }
   return new AddSurveyStub()
 }
@@ -47,6 +48,14 @@ const makeFakeRequest = (): HttpRequest => ({
 })
 
 describe('Add Survey', () => {
+  beforeAll(() => {
+    Mockdate.set(new Date())
+  })
+
+  afterAll(() => {
+    Mockdate.reset()
+  })
+
   test('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const surveySpy = jest.spyOn(validationStub, 'validate')
@@ -77,7 +86,8 @@ describe('Add Survey', () => {
       answers: [{
         image: 'any_image',
         answers: 'any_answer'
-      }]
+      }],
+      date: new Date()
     })
   })
 
