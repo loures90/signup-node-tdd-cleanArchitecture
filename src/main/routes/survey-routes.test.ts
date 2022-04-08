@@ -6,7 +6,7 @@ import env from '../config/env'
 import { ObjectId } from 'mongodb'
 
 let accountsCollection
-
+let surveysCollection
 describe('Surveys Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
@@ -17,7 +17,7 @@ describe('Surveys Routes', () => {
   })
 
   beforeEach(async () => {
-    const surveysCollection = await MongoHelper.getCollection('surveys')
+    surveysCollection = await MongoHelper.getCollection('surveys')
     await surveysCollection.deleteMany({})
     accountsCollection = await MongoHelper.getCollection('accounts')
     await accountsCollection.deleteMany({})
@@ -73,6 +73,47 @@ describe('Surveys Routes', () => {
         .get('/api/surveys')
         .send()
         .expect(403)
+    })
+
+    test('Should return 200 on success', async () => {
+      const result = await accountsCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password'
+      })
+      const id = result.insertedId.toString()
+      const accessToken = sign({ id }, env.jwt_secret)
+      await accountsCollection.updateOne({ _id: new ObjectId(id) },
+        {
+          $set: {
+            accessToken
+          }
+        })
+
+      await surveysCollection.insertMany([{
+        id: 'any_id',
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date()
+      },
+      {
+        id: 'other_id',
+        question: 'other_question',
+        answers: [{
+          image: 'other_image',
+          answer: 'other_answer'
+        }],
+        date: new Date()
+      }])
+
+      await request(app)
+        .get('/api/surveys')
+        .set('x-access-token', accessToken)
+        .send()
+        .expect(200)
     })
   })
 })
