@@ -1,6 +1,6 @@
 import { InvalidParamError, ServerError } from '../../../errors'
 import { LoginController } from './login-controler'
-import { Authentication, AuthenticationModel } from '../../../../domain/usecases/authentication'
+import { Authentication, AuthenticationModel } from '../../../../domain/usecases/account/authentication'
 import { badRequest, ok, unauthorized } from '../../../helpers/http/http-helper'
 import { HttpRequest, Validation } from './login-controler-protocols'
 

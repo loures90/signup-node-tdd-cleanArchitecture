@@ -1,10 +1,10 @@
 import { MongoHelper } from '../helpers/mongo-helper'
-import { SaveSurveyResultRepository } from '../../../../data/usecases/save-survey-results/db-save-survey-result-protocols'
-// import { SurveyResultModel } from '../../../../domain/models/survey-result'
-import { SaveSurveyResultModel } from '../../../../domain/usecases/save-survey-result'
+import { SurveyResultModel } from '../../../../domain/models/survey-result'
+import { SaveSurveyResultModel } from '../../../../domain/usecases/survey-result/save-survey-result'
+import { SaveSurveyResultRepository } from '../../../../data/protocols/db/survey-result/save-survey-result-repository'
 
 export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
-  async save (data: SaveSurveyResultModel): Promise<any> {
+  async save (data: SaveSurveyResultModel): Promise<SurveyResultModel> {
     const surveyResultsCollection = await MongoHelper.getCollection('surveyResults')
     const result = await surveyResultsCollection.findOneAndUpdate({
       surveyId: data.surveyId,
@@ -18,8 +18,16 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
       upsert: true,
       returnDocument: 'after'
     })
-    const id = result.value._id.toString()
-    delete result.value._id
-    return { ...result.value, id: id }
+    if (!result.value?._id) {
+      return null
+    }
+    const survey: SurveyResultModel = {
+      id: result.value._id.toString(),
+      surveyId: result.value.surveyId,
+      accountId: result.value.accountId,
+      answer: result.value.answer,
+      date: result.value.date
+    }
+    return survey
   }
 }
