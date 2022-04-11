@@ -61,7 +61,7 @@ describe('Account Mongo Repository', () => {
     })
   })
 
-  describe('loadByEmail()', () => {
+  describe('updateAccessToken()', () => {
     test('Should update accessToken updateAccessToken  success', async () => {
       const sut = makeSut()
       const result = await accountsCollection.insertOne({
@@ -88,6 +88,7 @@ describe('Account Mongo Repository', () => {
       })
       const account = await sut.loadByToken('any_token')
       expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
     })
 
     test('Should return an account if loadToken is on success with admin role', async () => {
@@ -101,6 +102,7 @@ describe('Account Mongo Repository', () => {
       })
       const account = await sut.loadByToken('any_token', 'admin')
       expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
     })
 
     test('Should return null on loadByToken with invalid', async () => {
