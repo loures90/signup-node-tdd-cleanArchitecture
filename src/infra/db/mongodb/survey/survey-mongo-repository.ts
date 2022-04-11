@@ -3,8 +3,10 @@ import { MongoHelper } from '../helpers/mongo-helper'
 import { AddSurveyModel } from '../../../../domain/usecases/add-survey'
 import { LoadSurveysRepository } from '../../../../data/protocols/db/survey/load-surveys-repository'
 import { SurveyModel } from '../../../../domain/models/survey'
+import { LoadSurveyByIdRepository } from '../../../../data/usecases/load-survey-by-id/db-load-survey-by-id-protocols'
+import { ObjectId } from 'mongodb'
 
-export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRepository {
+export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRepository, LoadSurveyByIdRepository {
   async add (addSurveyData: AddSurveyModel): Promise<void> {
     const surveyData = { ...addSurveyData }
     const surveysCollection = await MongoHelper.getCollection('surveys')
@@ -26,5 +28,20 @@ export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRe
       }
     })
     return result
+  }
+
+  async loadById (id: string): Promise<SurveyModel> {
+    const surveysCollection = await MongoHelper.getCollection('surveys')
+    const result = await surveysCollection.findOne({ _id: new ObjectId(id) })
+    if (!result?._id) {
+      return null
+    }
+    const survey: SurveyModel = {
+      id: result._id.toString(),
+      question: result.question,
+      answers: result.answers,
+      date: result.date
+    }
+    return survey
   }
 }
