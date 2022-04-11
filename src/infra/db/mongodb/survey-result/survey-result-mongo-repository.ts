@@ -18,9 +18,6 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
       upsert: true,
       returnDocument: 'after'
     })
-    if (!result.value?._id) {
-      return null
-    }
     const survey: SurveyResultModel = {
       id: result.value._id.toString(),
       surveyId: result.value.surveyId,
