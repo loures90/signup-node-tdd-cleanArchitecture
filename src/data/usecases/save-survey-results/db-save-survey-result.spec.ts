@@ -60,4 +60,10 @@ describe('DbAddSurvey', () => {
     const result = sut.save(makeFakeSurveyResultData())
     await expect(result).rejects.toThrow()
   })
+
+  test('Should return a survey result when SaveSurveyResultRepository succeed ', async () => {
+    const { sut } = makeSut()
+    const survey = await sut.save(makeFakeSurveyResultData())
+    expect(survey).toEqual(makeFakeSurveyResult())
+  })
 })
